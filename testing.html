@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>LED Control</title>
+  <style>
+    /* Basic styling */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    h1 {
+      color: #4CAF50;
+      margin-top: 20px;
+    }
+
+    h3 {
+      color: #4CAF50;
+    }
+
+    p {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    /* Style for buttons */
+    a {
+      display: inline-block;
+      background-color: #4CAF50; /* Green color for button */
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 10px;
+      font-size: 18px;
+    }
+
+    a:hover {
+      background-color: #45a049; /* Slightly darker green on hover */
+    }
+
+    /* Form styling */
+    form {
+      margin-top: 20px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      width: 250px;
+      border: 2px solid #4CAF50;
+      border-radius: 5px;
+    }
+
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-left: 10px;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    /* Styling the serial data box */
+    textarea {
+      width: 90%; /* Allow the box to take 90% of the screen width */
+      max-width: 800px; /* Limit the width for very large screens */
+      min-height: 200px; /* Set a minimum height */
+      margin: 20px auto;
+      display: block;
+      background-color: #f1f1f1;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 15px;
+      font-size: 16px;
+      resize: both; /* Allow resizing both horizontally and vertically */
+    }
+  </style>
+  <script>
+    function updateSerialData() {
+      fetch('/getSerialData')  // Make a request to /getSerialData to get the latest serial data
+        .then(response => response.text())  // Get the response as text
+        .then(data => {
+          document.getElementById('outputBox').value = data;  // Update the textarea with serial data
+        });
+    }
+    setInterval(updateSerialData, 1000);  // Call every 1000ms (1 second) to refresh serial data
+  </script>
+</head>
+<body>
+  <h1>ESP32 Web Server</h1>
+  <h3>Using Access Point (AP) Mode</h3>
+
+  <!-- Display the custom message on the web page -->
+  <p>Custom Message: <!-- Replace with dynamic content from the server --></p>
+
+  <!-- Display LED1 control buttons -->
+  <p>LED1 Status: OFF</p>
+  <a href="/led1on">Turn ON LED1</a>
+
+  <!-- Display LED2 control buttons -->
+  <p>LED2 Status: OFF</p>
+  <a href="/led2on">Turn ON LED2</a>
+
+  <!-- Form to set custom message -->
+  <h3>Set Custom Message</h3>
+  <form action='/setMessage' method='get'>
+    <input type='text' name='message' placeholder='Enter your message' />
+    <input type='submit' value='Set Message' />
+  </form>
+
+  <!-- Display Serial Monitor Data -->
+  <h3>ESP32 Serial Monitor Data</h3>
+  <h4>ESP32 Monitor Data:</h4>
+  <div>
+    <label for='outputBox'>Received Text:</label>
+  </div>
+  <textarea id='outputBox' rows='4' cols='50' readonly></textarea>  <!-- Serial data will be updated here dynamically -->
+</body>
+</html>
